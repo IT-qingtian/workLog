@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { WorkLog, WorkLogFormData, TaskStatus } from '../types/workLog';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { WorkLog, WorkLogFormData, TaskStatus } from '../../types/workLog';
 import { v4 as uuidv4 } from 'uuid';
 
 interface WorkLogState {
@@ -136,6 +136,20 @@ export const useWorkLogStore = create<WorkLogState>()(
     }),
     {
       name: 'work-log-storage',
+      storage: createJSONStorage(() => ({
+        getItem: async (key) => {
+          if (window.electronStorage) return await window.electronStorage.getItem(key);
+          return localStorage.getItem(key);
+        },
+        setItem: async (key, value) => {
+          if (window.electronStorage) return await window.electronStorage.setItem(key, value);
+          localStorage.setItem(key, value);
+        },
+        removeItem: async (key) => {
+          if (window.electronStorage) return await window.electronStorage.removeItem(key);
+          localStorage.removeItem(key);
+        },
+      })),
       partialize: (state) => ({ 
         logs: state.logs, 
         repositories: state.repositories,

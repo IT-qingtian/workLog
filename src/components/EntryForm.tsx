@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, X, Settings, GitBranch, Link2, FileText, Activity, StickyNote, AlertCircle, Save, RotateCcw } from 'lucide-react';
-import { useWorkLogStore } from '../store/useWorkLogStore';
-import { RepoBranch, TaskStatus } from '../types/workLog';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Activity, AlertCircle, FileText, GitBranch, Link2, Plus, RotateCcw, Save, Settings, StickyNote, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { motion, AnimatePresence } from 'framer-motion';
+import { RepoBranch, TaskStatus } from '../../types/workLog';
+import { useWorkLogStore } from '../store/useWorkLogStore';
 import { Select } from './ui/Select';
 
 export const EntryForm: React.FC = () => {

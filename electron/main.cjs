@@ -1,5 +1,7 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const fsp = require('fs').promises;
 
 // 不需要菜单
 function createWindow() {
@@ -7,8 +9,9 @@ function createWindow() {
     width: 1300,
     height: 900,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.cjs'),
     },
     icon: path.join(__dirname, '../public/favicon.ico'),
   });
@@ -16,7 +19,7 @@ function createWindow() {
   win.setMenu(null);
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (/^https?:\/\//.test(url)) {
-      require('electron').shell.openExternal(url);
+      shell.openExternal(url);
       return { action: 'deny' };
     }
     return { action: 'allow' };
@@ -30,6 +33,38 @@ function createWindow() {
     win.loadFile(path.join(__dirname, '../dist/index.html'));
   }
 }
+
+function getStoreFile() {
+  return path.join(app.getPath('userData'), 'work-log-store.json');
+}
+async function readStore() {
+  try {
+    const data = await fsp.readFile(getStoreFile(), 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    return {};
+  }
+}
+async function writeStore(obj) {
+  try {
+    await fsp.writeFile(getStoreFile(), JSON.stringify(obj), 'utf-8');
+  } catch {}
+}
+
+ipcMain.handle('storage:get', async (_e, key) => {
+  const obj = await readStore();
+  return obj[key] ?? null;
+});
+ipcMain.handle('storage:set', async (_e, key, value) => {
+  const obj = await readStore();
+  obj[key] = value;
+  await writeStore(obj);
+});
+ipcMain.handle('storage:remove', async (_e, key) => {
+  const obj = await readStore();
+  delete obj[key];
+  await writeStore(obj);
+});
 
 app.whenReady().then(() => {
   createWindow();

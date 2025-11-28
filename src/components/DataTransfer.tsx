@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Download, Upload, FileJson, AlertCircle, Check } from 'lucide-react';
 import { useWorkLogStore } from '../store/useWorkLogStore';
-import { WorkLog } from '../types/workLog';
+import { WorkLog } from '../../types/workLog';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const DataTransfer: React.FC = () => {
