@@ -9,6 +9,8 @@ interface WorkLogState {
   searchQuery: string;
   filterStatus: TaskStatus | 'all';
   filterRepo: string | 'all';
+  sortBy: 'createdAt' | 'updatedAt';
+  sortOrder: 'asc' | 'desc';
   editingLogId: string | null;
   appTitle: string;
   
@@ -23,6 +25,8 @@ interface WorkLogState {
   setSearchQuery: (query: string) => void;
   setFilterStatus: (status: TaskStatus | 'all') => void;
   setFilterRepo: (repo: string | 'all') => void;
+  setSortBy: (sortBy: 'createdAt' | 'updatedAt') => void;
+  setSortOrder: (sortOrder: 'asc' | 'desc') => void;
   setEditingLogId: (id: string | null) => void;
   setAppTitle: (title: string) => void;
   
@@ -37,6 +41,8 @@ export const useWorkLogStore = create<WorkLogState>()(
       searchQuery: '',
       filterStatus: 'all',
       filterRepo: 'all',
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
       editingLogId: null,
       appTitle: '工作日志 Pro',
       
@@ -95,16 +101,17 @@ export const useWorkLogStore = create<WorkLogState>()(
       setSearchQuery: (query) => set({ searchQuery: query }),
       setFilterStatus: (status) => set({ filterStatus: status }),
       setFilterRepo: (repo) => set({ filterRepo: repo }),
+      setSortBy: (sortBy) => set({ sortBy }),
+      setSortOrder: (sortOrder) => set({ sortOrder }),
       setEditingLogId: (id) => set({ editingLogId: id }),
       setAppTitle: (title) => set({ appTitle: title }),
 
       getFilteredLogs: () => {
-        const { logs, searchQuery, filterStatus, filterRepo } = get();
+        const { logs, searchQuery, filterStatus, filterRepo, sortBy, sortOrder } = get();
         
-        return logs.filter((log) => {
-          // Text Search
+        const filtered = logs.filter((log) => {
           const lowerQuery = searchQuery.toLowerCase();
-          const matchesSearch = 
+          const matchesSearch =
             !searchQuery.trim() ||
             log.requirement.toLowerCase().includes(lowerQuery) ||
             log.yunxiaoId.toLowerCase().includes(lowerQuery) ||
@@ -115,13 +122,15 @@ export const useWorkLogStore = create<WorkLogState>()(
                 rb.branch.toLowerCase().includes(lowerQuery)
             );
 
-          // Status Filter
           const matchesStatus = filterStatus === 'all' || log.status === filterStatus;
-
-          // Repo Filter
           const matchesRepo = filterRepo === 'all' || log.repoBranches.some(rb => rb.repository === filterRepo);
 
           return matchesSearch && matchesStatus && matchesRepo;
+        });
+
+        return filtered.sort((a, b) => {
+          const diff = (a[sortBy] as number) - (b[sortBy] as number);
+          return sortOrder === 'desc' ? -diff : diff;
         });
       },
     }),

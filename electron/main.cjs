@@ -14,6 +14,13 @@ function createWindow() {
   });
   // 不需要菜单
   win.setMenu(null);
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:\/\//.test(url)) {
+      require('electron').shell.openExternal(url);
+      return { action: 'deny' };
+    }
+    return { action: 'allow' };
+  });
 
   if (process.env.NODE_ENV === 'development') {
     win.loadURL('http://localhost:5173');

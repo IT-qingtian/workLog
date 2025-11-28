@@ -165,7 +165,7 @@ export const EntryForm: React.FC = () => {
   ];
 
   return (
-    <div className={`bg-white rounded-2xl shadow-sm border overflow-hidden transition-colors ${editingLogId ? 'border-indigo-200 ring-2 ring-indigo-500/10' : 'border-slate-100'}`}>
+    <div className={`bg-white rounded-2xl shadow-sm border transition-colors ${editingLogId ? 'border-indigo-200 ring-2 ring-indigo-500/10' : 'border-slate-100'}`}>
       <div className={`p-5 border-b flex justify-between items-center ${editingLogId ? 'bg-indigo-50/50 border-indigo-100' : 'bg-slate-50/50 border-slate-50'}`}>
         <h2 className={`font-semibold flex items-center gap-2 ${editingLogId ? 'text-indigo-700' : 'text-slate-800'}`}>
           {editingLogId ? <Save size={18} /> : <FileText size={18} className="text-indigo-500" />}

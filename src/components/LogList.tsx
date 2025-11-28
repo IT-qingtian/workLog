@@ -44,6 +44,10 @@ export const LogList: React.FC = () => {
     setFilterStatus, 
     filterRepo, 
     setFilterRepo,
+    sortBy,
+    sortOrder,
+    setSortBy,
+    setSortOrder,
     repositories,
     setEditingLogId,
     editingLogId
@@ -62,8 +66,6 @@ export const LogList: React.FC = () => {
 
   const handleEdit = (id: string) => {
     setEditingLogId(id);
-    // Scroll to top to see the form
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const statusOptions = [
@@ -77,6 +79,11 @@ export const LogList: React.FC = () => {
   const repoOptions = [
     { value: 'all', label: '所有仓库' },
     ...repositories.map(repo => ({ value: repo, label: repo }))
+  ];
+
+  const sortOptions = [
+    { value: 'createdAt', label: '按创建时间' },
+    { value: 'updatedAt', label: '按更新时间' }
   ];
 
   return (
@@ -107,6 +114,24 @@ export const LogList: React.FC = () => {
             className="w-full"
           />
         </div>
+
+        <div className="w-px h-6 bg-slate-100"></div>
+
+        <div className="w-48">
+          <Select
+            value={sortBy}
+            onChange={(val) => setSortBy(val as 'createdAt' | 'updatedAt')}
+            options={sortOptions}
+            className="w-full"
+          />
+        </div>
+        <button
+          onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+          className="px-3 py-2 rounded-xl border border-slate-200 text-sm text-slate-600 hover:border-indigo-300 hover:text-indigo-600 bg-white"
+          title={sortOrder === 'desc' ? '倒序' : '正序'}
+        >
+          {sortOrder === 'desc' ? '倒序' : '正序'}
+        </button>
       </div>
 
       {/* List Content */}
