@@ -328,6 +328,8 @@ export const EntryForm: React.FC = () => {
                           ...getAvailableRepos(rb.id).map(r => ({ value: r, label: r }))
                         ].sort((a, b) => a.label.localeCompare(b.label))}
                         placeholder="选择仓库..."
+                        searchable
+                        searchPlaceholder="搜索仓库..."
                         className={`w-full ${errors[`repo-${rb.id}`] ? 'ring-1 ring-red-300 rounded-xl' : ''}`}
                       />
                       

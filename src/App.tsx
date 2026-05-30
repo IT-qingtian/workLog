@@ -100,7 +100,7 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Sidebar - Entry Form */}
-          <div className="lg:col-span-4 xl:col-span-3 space-y-6">
+          <div className="lg:col-span-5 xl:col-span-3 space-y-6">
             <div className="lg:sticky lg:top-24 space-y-6">
               <div className="bg-gradient-to-r from-indigo-500 to-violet-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
                 <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
@@ -120,7 +120,7 @@ function App() {
           </div>
 
           {/* Main Content - Log List */}
-          <div className="lg:col-span-8 xl:col-span-9 space-y-6">
+          <div className="lg:col-span-7 xl:col-span-9 space-y-6">
             <div className="md:hidden mb-6">
               <SearchBar />
             </div>
